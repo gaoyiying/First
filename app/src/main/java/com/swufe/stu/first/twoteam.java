@@ -32,7 +32,6 @@ public class twoteam extends AppCompatActivity {
             score1 = 0;
             score2 = 0;
         }
-
         show();
     }
 

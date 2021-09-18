@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">程序</string>
+    <string name="btn1_label">姓名</string>
+    <string name="btn2_lable">班级</string>
+    <string name="btn3_lable">姓名</string>
+    <string name="btn4_lable">密码</string>
+    <string name="weight_lable">体重</string>
+    <string name="height">身高</string>
+    <string name="BMI">BMI</string>
+</resources>

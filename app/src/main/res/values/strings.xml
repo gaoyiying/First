@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">First</string>
+    <string name="btn1_label">Name</string>
+    <string name="btn2_lable">ClassRoom</string>
+    <string name="btn3_lable">please input your name</string>
+    <string name="btn4_lable">please input your password</string>
+    <string name="weight_lable">please input the weight(kg)</string>
+    <string name="height">pleast input the height(m)</string>
+    <string name="BMI">your BMI is</string>
+</resources>

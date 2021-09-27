@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.First">
         <activity
+            android:name=".huilv"
+            android:exported="true" />
+        <activity
             android:name=".twoteam"
             android:exported="true" />
         <activity

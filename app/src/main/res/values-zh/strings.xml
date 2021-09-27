@@ -8,4 +8,5 @@
     <string name="weight_lable">体重</string>
     <string name="height">身高</string>
     <string name="BMI">BMI</string>
+    <string name="menu_set">标题</string>
 </resources>

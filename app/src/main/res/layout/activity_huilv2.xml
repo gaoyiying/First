@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".huilv2">
+
+    <EditText
+        android:id="@+id/input1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textSize="30dp" />
+
+    <EditText
+        android:id="@+id/input2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textSize="30dp" />
+
+    <EditText
+        android:id="@+id/input3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/SAVE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="SAVE"
+        android:onClick="Click"/>
+</LinearLayout>

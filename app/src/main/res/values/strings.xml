@@ -7,4 +7,5 @@
     <string name="weight_lable">please input the weight(kg)</string>
     <string name="height">pleast input the height(m)</string>
     <string name="BMI">your BMI is</string>
+    <string name="menu_set">setting</string>
 </resources>

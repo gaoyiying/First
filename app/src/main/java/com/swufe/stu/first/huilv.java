@@ -1,6 +1,11 @@
 package com.swufe.stu.first;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +19,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-public class huilv extends AppCompatActivity  {
+public class huilv extends AppCompatActivity implements Runnable {
     private static final String TAG = "huilv";
     EditText edit;
     float dollarrate = 0.1548f;
     float eurorate = 0.1323f;
     float wonrate = 182.5773f;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +43,33 @@ public class huilv extends AppCompatActivity  {
         TextView output = findViewById(R.id.output);
         Log.i("11111", "onCreate: fg");
         edit = findViewById(R.id.input);
+
+        //读取保存的数据
+        SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+        PreferenceManager.getDefaultSharedPreferences(this);
+        dollarrate = sharedPreferences.getFloat("dollar_rate",0.0f);
+        eurorate = sharedPreferences.getFloat("euro_rate",0.0f);
+        wonrate = sharedPreferences.getFloat("won_rate",0.0f);
+        Log.i(TAG, "onCreate: "+dollarrate);
+        Log.i(TAG, "onCreate: "+eurorate);
+        Log.i(TAG, "onCreate: "+wonrate);
+
+
+
+        handler = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                Log.i(TAG, "handleMessage: 收到消息");
+                if(msg.what==6){
+                    String str = (String) msg.obj;
+                    Log.i(TAG, "handleMessage: 收到消息"+str);
+                }
+                super.handleMessage(msg);
+            }
+        };
+        //开启线程
+        Thread t = new Thread(this);
+        t.start();
     }
     public void Click(View btn) {
         Log.i(TAG, "onClick: AAAAA");
@@ -61,6 +101,7 @@ public class huilv extends AppCompatActivity  {
         config.putExtra("euro_rate_key", eurorate);
         config.putExtra("won_rate_key", wonrate);
 
+
         Log.i(TAG, "onActivityResult: dollarrate=" + dollarrate);
         Log.i(TAG, "onActivityResult: eurorate=" + eurorate);
         Log.i(TAG, "onActivityResult: wonrate=" + wonrate);
@@ -87,6 +128,14 @@ public class huilv extends AppCompatActivity  {
              */
         }
 
+        //保存数据到sp
+        SharedPreferences sp = getSharedPreferences("myrate",Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putFloat("dollar_rate",dollarrate);
+        editor.putFloat("euro_rate",eurorate);
+        editor.putFloat("won_rate",wonrate);
+        editor.apply();
+
         Log.i(TAG, "onActivityResult: dollarrate=" + dollarrate);
         Log.i(TAG, "onActivityResult: eurorate=" + eurorate);
         Log.i(TAG, "onActivityResult: wonrate=" + wonrate);
@@ -107,4 +156,53 @@ public class huilv extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void run(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, "run: ....");
+        //发送消息给主线程
+        Message msg = handler.obtainMessage();
+        msg.what = 6;
+        msg.obj = "hello from run";
+        handler.sendMessage(msg);
+        Log.i(TAG, "run: 消息已发送");
+
+        //获取网络数据
+        URL url = null;
+        try {
+            url = new URL("https://www.usd-cny.com/bankofchina.htm");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            InputStream in = http.getInputStream();
+
+            String html = inputStream2String(in);
+            Log.i(TAG, "run: html=" + html);
+
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private  String inputStream2String(InputStream inputStream)
+            throws IOException{
+        final int bufferSize = 1024;
+        final char[] buffer = new char[bufferSize];
+        final StringBuilder out = new StringBuilder();
+        Reader in = new InputStreamReader(inputStream,"gb2312");
+        while (true){
+            int rsz = in.read(buffer,0,buffer.length);
+            if(rsz<0){
+                break;
+            }
+            out.append(buffer,0,rsz);
+        }
+        return out.toString();
+    }
+
 }

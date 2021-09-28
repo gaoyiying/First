@@ -41,5 +41,5 @@
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="SAVE"
-        android:onClick="Click"/>
+        android:onClick="Save"/>
 </LinearLayout>

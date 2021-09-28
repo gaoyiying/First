@@ -1,6 +1,9 @@
 package com.swufe.stu.first;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,7 +56,6 @@ public class huilv2 extends AppCompatActivity {
         //startActivity(Save);
         setResult(3,first);
         finish();
-
     }
 
 }

@@ -22,11 +22,11 @@ public class twoteam extends AppCompatActivity {
     public void click(View btn){
         Log.i(TAG, "click: ");
         if(btn.getId()==R.id.btn3){
-            score1 += 3;
+            score1 ++;
         }else if(btn.getId()==R.id.btn2){
             score1 += 2;
         }else if(btn.getId()==R.id.btn1){
-            score1++;
+            score1 += 3;
         }else{
             //reset
             score1 = 0;
@@ -38,11 +38,11 @@ public class twoteam extends AppCompatActivity {
     public void clickb(View btn){
         Log.i(TAG, "clickb: ");
         if(btn.getId()==R.id.btnb3){
-            score2 += 3;
+            score2 ++;
         }else if(btn.getId()==R.id.btnb2){
             score2 += 2;
         }else if(btn.getId()==R.id.btnb1){
-            score2++;
+            score2 += 3;
         }
         show();
     }

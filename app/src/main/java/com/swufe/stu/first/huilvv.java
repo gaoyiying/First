@@ -32,15 +32,10 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class huilv extends AppCompatActivity implements Runnable {
+public class huilvv extends AppCompatActivity implements Runnable {
     private static final String TAG = "huilv";
     EditText edit;
-    Date start ;
-    Date end ;
     float dollarrate = 0.1548f;
     float eurorate = 0.1323f;
     float wonrate = 182.5773f;
@@ -57,40 +52,12 @@ public class huilv extends AppCompatActivity implements Runnable {
         //读取保存的数据
         SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
         PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences sharedPreference = getSharedPreferences("time", Activity.MODE_PRIVATE);
         dollarrate = sharedPreferences.getFloat("dollar_rate",0.0f);
         eurorate = sharedPreferences.getFloat("euro_rate",0.0f);
         wonrate = sharedPreferences.getFloat("won_rate",0.0f);
         Log.i(TAG, "onCreate: "+dollarrate);
         Log.i(TAG, "onCreate: "+eurorate);
         Log.i(TAG, "onCreate: "+wonrate);
-
-
-
-        String dateString;
-        dateString = sharedPreference.getString("dateString","");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        Log.i(TAG,"dataString:"+dateString);
-        if(dateString.equals("")){//第一次运行
-            // HH:mm:ss
-            //获取当前时间
-            start = new Date(System.currentTimeMillis());//获取当前时间
-            dateString = simpleDateFormat.format(start);//转为String
-            SharedPreferences.Editor editor=sharedPreference.edit();
-            editor.putString("dateString",dateString);
-            editor.apply();
-        }else{
-            try {
-                dateString = sharedPreference.getString("dateString", null);
-                start =simpleDateFormat.parse(dateString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        //start =new Date(System.currentTimeMillis()) ;
-
 
 
 
@@ -113,7 +80,7 @@ public class huilv extends AppCompatActivity implements Runnable {
                     Log.i(TAG, "handleMessage: wonrate=" + wonrate);
 
                     //提示
-                    Toast.makeText(huilv.this,"数据已更新",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(huilvv.this,"数据已更新",Toast.LENGTH_SHORT).show();
                 }
                 super.handleMessage(msg);
             }
@@ -177,16 +144,7 @@ public class huilv extends AppCompatActivity implements Runnable {
             Log.i(TAG, "onActivityResult: eurorate=" + eurorate);
             Log.i(TAG, "onActivityResult: wonrate=" + wonrate);
              */
-
-             /*           //保存文件名，模式      得到参数
-        SharedPreferences sharedPreferences=getSharedPreferences("change_rate", Activity.MODE_PRIVATE);
-        PreferenceManager.getDefaultSharedPreferences(this);//权限设定
-        //获取数据
-        D_rate= sharedPreferences.getFloat("D_rate",0.0f);
-        E_rate= sharedPreferences.getFloat("E_rate",0.0f);
-        W_rate= sharedPreferences.getFloat("W_rate",0.0f);*/
         }
-
 
         //保存数据到sp
         SharedPreferences sp = getSharedPreferences("myrate",Activity.MODE_PRIVATE);
@@ -233,97 +191,76 @@ public class huilv extends AppCompatActivity implements Runnable {
          */
         Log.i(TAG, "run: 消息已发送");
 
-        Log.i(TAG, "onEnd:fffffffffffffffffffff " );
-        //发送消息
-        while (true) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
-            end = new Date(System.currentTimeMillis()); //获取当前时间
-            long cha = end.getTime() - start.getTime();
-            double result = cha * 1.0 / (1000 * 60 * 60);
-            if (result > 24) {
-                SharedPreferences sp = getSharedPreferences("time", Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.apply();
-                editor.putString("dataString", simpleDateFormat.format(end));
-                Log.i(TAG, "onEnd: " + simpleDateFormat.format(end));
-                /*  Thread.sleep(10000);*/
+        //获取网络数据
+        Bundle bundle = new Bundle();
+        URL url = null;
+        try {
+            /**
+             url = new URL("https://www.usd-cny.com/bankofchina.htm");
+             HttpURLConnection http = (HttpURLConnection) url.openConnection();
+             InputStream in = http.getInputStream();
 
-                //获取网络数据
-                Bundle bundle = new Bundle();
-                URL url = null;
-                try {
-                    /**
-                     url = new URL("https://www.usd-cny.com/bankofchina.htm");
-                     HttpURLConnection http = (HttpURLConnection) url.openConnection();
-                     InputStream in = http.getInputStream();
+             String html = inputStream2String(in);
+             Log.i(TAG, "run: html=" + html);
+             **/
+            Document doc = Jsoup.connect("https://www.usd-cny.com/bankofchina.htm").get();
+            Log.i(TAG, "run: title= " + doc.title());
 
-                     String html = inputStream2String(in);
-                     Log.i(TAG, "run: html=" + html);
-                     **/
-                    Document doc = Jsoup.connect("https://www.usd-cny.com/bankofchina.htm").get();
-                    Log.i(TAG, "run: title= " + doc.title());
+            Elements h4s = doc.getElementsByTag("h4");
+            for(Element h4 : h4s){
+                Log.i(TAG, "run: h4=" + h4.text());
+            }
+            Elements tables = doc.getElementsByTag("table");
 
-                    Elements h4s = doc.getElementsByTag("h4");
-                    for (Element h4 : h4s) {
-                        Log.i(TAG, "run: h4=" + h4.text());
-                    }
-                    Elements tables = doc.getElementsByTag("table");
-
-                    Element table1 = tables.first();
-                    //Log.i(TAG, "run: table=" + table1);
-                    Elements trs = table1.getElementsByTag("tr");
-                    trs.remove(0);
-                    for (Element tr : trs) {
-                        Elements tds = tr.getElementsByTag("td");
-                        String cname = tds.get(0).text();
-                        String cval = tds.get(5).text();
-                        //Log.i(TAG, "run: tr=" + tr);
-                        if ("美元".equals(cname)) {
-                            bundle.putFloat("r1", 100f / Float.parseFloat(cval));
-                            Log.i(TAG, "run: dollarrate=" + cval);
-                        } else if ("欧元".equals(cname)) {
-                            bundle.putFloat("r2", 100f / Float.parseFloat(cval));
-                            Log.i(TAG, "run: eurorate=" + cval);
-                        } else if ("韩元".equals(cname)) {
-                            bundle.putFloat("r3", 100f / Float.parseFloat(cval));
-                            Log.i(TAG, "run: wonrate=" + cval);
-                        }
-                    }
-                    /**
-                     for(Element t:tables){
-                     Elements hrefs=t.getElementsByTag("a");
-                     Elements types=t.getElementsByTag("td");
-                     Element rate=types.last();
-                     for(int i=0;i<27;i++){
-                     Log.i(TAG, "run: hr=" + trs.get(i));
-                     }
-                     Log.i(TAG, "run: 下一行");
-                     Log.i(TAG, "run: a=" + hrefs.text());
-                     Log.i(TAG, "run: td=" + types.text());
-                     Log.i(TAG, "run: rate=" + rate.text());
-                     }
-                     **/
-
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            Element table1 = tables.first();
+            Log.i(TAG, "run: table=" + table1);
+            Elements trs = table1.getElementsByTag("tr");
+            trs.remove(0);
+            for(Element tr : trs){
+                Elements tds = tr.getElementsByTag("td");
+                String cname = tds.get(0).text();
+                String cval = tds.get(5).text();
+                //Log.i(TAG, "run: tr=" + tr);
+                if("美元".equals(cname)){
+                    bundle.putFloat("r1",100f/Float.parseFloat(cval));
+                }else if("欧元".equals(cname)){
+                    bundle.putFloat("r2",100f/Float.parseFloat(cval));
+                }else if("韩元".equals(cname)){
+                    bundle.putFloat("r3",100f/Float.parseFloat(cval));
                 }
+            }
+            /**
+             for(Element t:tables){
+             Elements hrefs=t.getElementsByTag("a");
+             Elements types=t.getElementsByTag("td");
+             Element rate=types.last();
+             for(int i=0;i<27;i++){
+             Log.i(TAG, "run: hr=" + trs.get(i));
+             }
+             Log.i(TAG, "run: 下一行");
+             Log.i(TAG, "run: a=" + hrefs.text());
+             Log.i(TAG, "run: td=" + types.text());
+             Log.i(TAG, "run: rate=" + rate.text());
+             }
+             **/
+
+
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         /*
         Message msg = handler.obtainMessage();
         msg.what = 6;
         msg.obj = "Hello from run";
          */
-                Message msg = handler.obtainMessage(6, bundle);
-                handler.sendMessage(msg);
-                Log.i(TAG, "run: 消息已发送");
-            }
-        }
-        }
+        Message msg = handler.obtainMessage(6,bundle);
+        handler.sendMessage(msg);
+        Log.i(TAG, "run: 消息已发送");
+    }
 
-    /*
     private  String inputStream2String(InputStream inputStream)
             throws IOException{
         final int bufferSize = 1024;
@@ -340,6 +277,21 @@ public class huilv extends AppCompatActivity implements Runnable {
         return out.toString();
     }
 
-     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

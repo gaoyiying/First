@@ -41,6 +41,9 @@ public class huilvv extends AppCompatActivity implements Runnable {
     float wonrate = 182.5773f;
     Handler handler;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

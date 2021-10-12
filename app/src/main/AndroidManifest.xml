@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.First">
         <activity
+            android:name=".rate_list"
+            android:exported="true" />
+        <activity
+            android:name=".MyListActivity"
+            android:exported="true" />
+        <activity
             android:name=".huilvv"
             android:exported="true" />
         <activity

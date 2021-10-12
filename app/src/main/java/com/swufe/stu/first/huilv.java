@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +24,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -119,6 +113,14 @@ public class huilv extends AppCompatActivity implements Runnable {
             }
         };
         //开启线程
+        /*
+        Thread t = new Thread(this);
+        t.start();
+
+         */
+
+        //Thread td = new MyThread();
+        //td.setHandler(handler);
         Thread t = new Thread(this);
         t.start();
     }

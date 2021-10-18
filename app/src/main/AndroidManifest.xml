@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.First">
         <activity
+            android:name=".RateCalcActivity"
+            android:exported="true" />
+        <activity
+            android:name=".rate_list_activity2"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="true" />
+        <activity
             android:name=".rate_list"
             android:exported="true" />
         <activity

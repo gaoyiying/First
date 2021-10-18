@@ -1,6 +1,7 @@
 package com.swufe.stu.first;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
@@ -12,14 +13,14 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import android.os.Handler;
 
-public class RateThread implements Runnable{
+public class RateMapThread implements Runnable{
     private static final String TAG = "RateThread";
     private Handler handler;
 
-    public RateThread(Handler handler) {
+    public RateMapThread(Handler handler) {
         this.handler = handler;
     }
 
@@ -38,7 +39,7 @@ public class RateThread implements Runnable{
         Log.i(TAG, "run: AAAA....");
         Bundle bundle = new Bundle();
 
-        List<String> retlist = new ArrayList<String>();
+        List<HashMap<String, String>> retlist = new ArrayList<>();
 
         //获取网络数据
         try {
@@ -69,7 +70,10 @@ public class RateThread implements Runnable{
                 String cval = tds.get(5).text();
                 //Log.i(TAG, "run: tr=" + tr);
                 Log.i(TAG, "run: cname=" + cname + "-->" + cval);
-                retlist.add(cname + "-->" + cval);
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("ItemTitle",cname);
+                map.put("ItemDetail",cval);
+                retlist.add(map);
             }
             /**
              for(Element t:tables){

@@ -16,7 +16,7 @@ import java.util.Map;
 public class MyAdapter extends ArrayAdapter {
     private static final String TAG = "MyAdapter";
 
-    public MyAdapter(@NonNull Context context, int resource, @NonNull ArrayList<HashMap<String,String>> data) {
+    public MyAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Item> data) {
         super(context, resource, data);
     }
 
@@ -27,12 +27,18 @@ public class MyAdapter extends ArrayAdapter {
         if(itemView == null){
             itemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
-        Map<String,String> map = (Map<String, String>) getItem(position);
+        //Map<String,String> map = (Map<String, String>) getItem(position);
+        Item item = (Item) getItem(position);
         TextView title = (TextView) itemView.findViewById(R.id.itemTitle);
         TextView detail = (TextView) itemView.findViewById(R.id.itemDetail);
 
+        /*
         title.setText(map.get("ItemTitle"));
         detail.setText(map.get("ItemDetail"));
+
+         */
+        title.setText(item.getCname());
+        detail.setText(item.getCval());
         return itemView;
     }
 }
